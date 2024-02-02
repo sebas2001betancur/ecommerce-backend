@@ -20,7 +20,6 @@ import com.stripe.model.*;
 import com.stripe.model.checkout.Session;
 
 import com.stripe.param.checkout.SessionCreateParams;
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -81,8 +80,12 @@ public class PaymentController {
 
           // Agrega las URLs directamente a los parámetros de la sesión de pago
           // Agrega las URLs directamente a los parámetros de la sesión de pago
-          paramsBuilder.setSuccessUrl("http://localhost:4200/payment-success?order_id=" + order.getId());
-          paramsBuilder.setCancelUrl("http://localhost:4200/payment-cancel?order_id=" + order.getId());
+          paramsBuilder.setSuccessUrl("https://ecommerce-frontend-angular.vercel.app/payment-success?order_id=" + order.getId() + "&stripe_payment_id={CHECKOUT_SESSION_ID}");
+          paramsBuilder.setCancelUrl("https://ecommerce-frontend-angular.vercel.app/payment-cancel?order_id=" + order.getId());
+          //mientras no se tenga desplegado se deja asi:
+          /*
+          paramsBuilder.setSuccessUrl("http://localhost:4200/payment-success?order_id=" + order.getId() + "&stripe_payment_id={CHECKOUT_SESSION_ID}");
+          paramsBuilder.setCancelUrl("http://localhost:4200/payment-cancel?order_id=" + order.getId());*/
 
 // Construye los parámetros y crea la sesión de pago
           SessionCreateParams sessionParams = paramsBuilder.build();
@@ -120,4 +123,5 @@ public class PaymentController {
             throw new PaymentException(e.getMessage());
         }
     }
-}
+  }
+
